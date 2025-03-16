@@ -1,6 +1,5 @@
 package io.github.enkarin.bookcrossing.books.model;
 
-import io.github.enkarin.bookcrossing.books.enums.Status;
 import io.github.enkarin.bookcrossing.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
