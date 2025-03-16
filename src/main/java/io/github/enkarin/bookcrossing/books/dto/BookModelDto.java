@@ -1,6 +1,7 @@
 package io.github.enkarin.bookcrossing.books.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.github.enkarin.bookcrossing.books.enums.Status;
 import io.github.enkarin.bookcrossing.books.model.Book;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ public class BookModelDto extends BookDto {
     protected final String city;
 
     private BookModelDto(final BookDto bookDto, final int bookId, final AttachmentDto attachment, final String city) {
-        super(bookDto.title, bookDto.author, bookDto.genre, bookDto.publishingHouse, bookDto.year);
+        super(bookDto.title, bookDto.author, bookDto.genre, bookDto.publishingHouse, bookDto.year, bookDto.status);
         this.bookId = bookId;
         this.city = city;
         this.attachmentId = Optional.ofNullable(attachment).map(AttachmentDto::getAttachId).orElse(null);
@@ -43,9 +44,10 @@ public class BookModelDto extends BookDto {
                          final String publishingHouse,
                          final int year,
                          final int bookId,
+                         final Status status,
                          final AttachmentDto attachment,
                          final String city) {
-        super(title, author, genre, publishingHouse, year);
+        super(title, author, genre, publishingHouse, year, status);
         this.bookId = bookId;
         this.city = city;
         this.attachmentId = Optional.ofNullable(attachment).map(AttachmentDto::getAttachId).orElse(null);
@@ -56,7 +58,8 @@ public class BookModelDto extends BookDto {
             book.getAuthor(),
             book.getGenre().getId(),
             book.getPublishingHouse(),
-            book.getYear()),
+            book.getYear(),
+            book.getStatus()),
             book.getBookId(),
             AttachmentDto.fromAttachment(book.getAttachment(), ORIGIN),
             book.getOwner().getCity());
