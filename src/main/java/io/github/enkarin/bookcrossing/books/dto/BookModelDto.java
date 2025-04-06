@@ -1,6 +1,7 @@
 package io.github.enkarin.bookcrossing.books.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.github.enkarin.bookcrossing.books.enums.Status;
 import io.github.enkarin.bookcrossing.books.model.Book;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ public class BookModelDto extends BookDto {
     protected final String city;
 
     private BookModelDto(final BookDto bookDto, final int bookId, final AttachmentDto attachment, final String city) {
-        super(bookDto.title, bookDto.author, bookDto.genre, bookDto.publishingHouse, bookDto.year);
+        super(bookDto.title, bookDto.author, bookDto.genre, bookDto.publishingHouse, bookDto.year, bookDto.statusId);
         this.bookId = bookId;
         this.city = city;
         this.attachmentId = Optional.ofNullable(attachment).map(AttachmentDto::getAttachId).orElse(null);
@@ -43,22 +44,26 @@ public class BookModelDto extends BookDto {
                          final String publishingHouse,
                          final int year,
                          final int bookId,
+                         final int statusId,
                          final AttachmentDto attachment,
                          final String city) {
-        super(title, author, genre, publishingHouse, year);
+        super(title, author, genre, publishingHouse, year, statusId);
         this.bookId = bookId;
         this.city = city;
         this.attachmentId = Optional.ofNullable(attachment).map(AttachmentDto::getAttachId).orElse(null);
     }
 
     public static BookModelDto fromBook(final Book book) {
-        return new BookModelDto(create(book.getTitle(),
-            book.getAuthor(),
-            book.getGenre().getId(),
-            book.getPublishingHouse(),
-            book.getYear()),
-            book.getBookId(),
-            AttachmentDto.fromAttachment(book.getAttachment(), ORIGIN),
-            book.getOwner().getCity());
+        return new BookModelDto(create(
+                book.getTitle(),
+                book.getAuthor(),
+                book.getGenre().getId(),
+                book.getPublishingHouse(),
+                book.getYear(),
+                Status.EXCHANGES.getId()),
+                book.getBookId(),
+                AttachmentDto.fromAttachment(book.getAttachment(), ORIGIN),
+                book.getOwner().getCity()
+        );
     }
 }
